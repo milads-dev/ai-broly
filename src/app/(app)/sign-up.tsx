@@ -1,11 +1,21 @@
 import * as React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const [isLoading, setLoading] = React.useState(false);
+
   const router = useRouter();
 
   const [emailAddress, setEmailAddress] = React.useState("");
@@ -81,31 +91,113 @@ export default function SignUpScreen() {
   }
 
   return (
-    <SafeAreaView>
-      <>
-        <Text>Sign up</Text>
-        <TextInput
-          autoCapitalize="none"
-          value={emailAddress}
-          placeholder="Enter email"
-          onChangeText={(email) => setEmailAddress(email)}
-        />
-        <TextInput
-          value={password}
-          placeholder="Enter password"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-        <TouchableOpacity onPress={onSignUpPress}>
-          <Text>Continue</Text>
-        </TouchableOpacity>
-        <View style={{ display: "flex", flexDirection: "row", gap: 3 }}>
-          <Text>Already have an account?</Text>
-          <Link href="/sign-in">
-            <Text>Sign in</Text>
-          </Link>
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <View className="flex-1 p-6">
+          <View className="flex-1 justify-center">
+            <View className="items-center mb-6">
+              <View className="justify-center items-center bg-gradient-to-br from-blue-600 to-purple-600 shadow-lg rounded-2xl w-30 h-30">
+                <Ionicons name="fitness" size={75} color="white" />
+              </View>
+              <Text className="mb-2 font-bold text-gray-900 text-3xl">
+                Join AI BROLY
+              </Text>
+              <Text className="text-gray-900 text-lg text-center">
+                Start your fitness journey{"\n"} and achieve your goals
+              </Text>
+            </View>
+            <View className="bg-white shadow-sm p-6 border border-gray-100 rounded-2xl">
+              <Text className="mb-4 font-medium text-gray-700 text-2xl text-center">
+                Create your Account
+              </Text>
+              <View className="mb-4">
+                <Text className="mb-2 font-medium text-gray-700 text-sm">
+                  Email
+                </Text>
+                <View className="flex-row items-center bg-gray-50 p-4 border-gray-200 rounded-xl">
+                  <Ionicons name="mail-outline" size={20} color="#6B7280" />
+                  <TextInput
+                    className="flex-1 ml-3 text-gray-900"
+                    autoCapitalize="none"
+                    value={emailAddress}
+                    placeholder="Enter your email"
+                    placeholderTextColor="#9CA3AF"
+                    onChangeText={(emailAddress) =>
+                      setEmailAddress(emailAddress)
+                    }
+                    editable={!isLoading}
+                  />
+                </View>
+                <View className="mb-6">
+                  <Text className="mb-2 font-medium text-gray-700 text-sm">
+                    Password
+                  </Text>
+                  <View className="flex-row items-center bg-gray-50 p-4 border-gray-200 rounded-xl">
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={20}
+                      color="#6B7280"
+                    />
+                    <TextInput
+                      className="flex-1 ml-3 text-gray-900"
+                      value={password}
+                      placeholder="Enter your password"
+                      placeholderTextColor="#9CA3AF"
+                      secureTextEntry={true}
+                      onChangeText={(password) => setPassword(password)}
+                      editable={!isLoading}
+                    />
+                  </View>
+                  <Text className="mt-1 text-gray-500 text-xs">
+                    Must be at least 8 characters long
+                  </Text>
+                </View>
+
+                <TouchableOpacity
+                  onPress={onSignUpPress}
+                  className={`rounded-xl py-4 shadown-sm mb-4 ${
+                    isLoading ? "bg-gray-400" : "bg-blue-600"
+                  }`}
+                  activeOpacity={0.8}
+                  disabled={isLoading}
+                >
+                  <View className="flex-row justify-center items-center">
+                    {isLoading ? (
+                      <Ionicons name="refresh" size={20} color="white" />
+                    ) : (
+                      <Ionicons
+                        name="person-add-outline"
+                        size={20}
+                        color="white"
+                      />
+                    )}
+
+                    <Text className="ml-2 font-semibold text-white text-lg">
+                      {isLoading ? "Creating Account..." : "Create Account"}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <Text className="text-gray-600 text-xs text-center">
+                  By signing up, you agree to our Terms & Conditions and Privacy
+                  Policy.
+                </Text>
+              </View>
+            </View>
+            <View className="flex-row justify-center items-center mt-6">
+              <Text>Already have an account? </Text>
+              <Link href="/sign-in">
+                <Text className="font-semibold text-blue-600">Sign in</Text>
+              </Link>
+            </View>
+          </View>
         </View>
-      </>
+        <Text className="pb-6 text-gray-500 text-xs text-center">
+          © AI BROLY. All rights reserved.
+        </Text>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

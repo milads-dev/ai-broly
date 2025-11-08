@@ -11,6 +11,7 @@ import {
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 
 const Page = () => {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -56,78 +57,105 @@ const Page = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
-        {/* Header Section */}
-        <View className="flex-1 justify-center">
-          {/* <Text>Welcome Back!</Text> */}
-          <View className="items-center mb-8">
-            <View className="justify-center items-center bg-gradient-to-br from-blue-600 to-purple-600 shadow-lg mb-4 rounded-2xl w-30 h-30">
-              <Ionicons name="fitness" size={75} color="white" />
+        <View className="flex-1 p-6">
+          {/* Header Section */}
+          <View className="flex-1 justify-center">
+            {/* <Text>Welcome Back!</Text> */}
+            <View className="items-center mb-1">
+              <View className="justify-center items-center bg-gradient-to-br from-blue-600 to-purple-600 shadow-lg mb-4 rounded-2xl w-30 h-30">
+                <Ionicons name="fitness" size={75} color="white" />
+              </View>
+              <Text className="mb-2 font-bold text-gray-900 text-3xl">
+                AI Broly
+              </Text>
+              <Text className="text-gray-600 text-lg text-center">
+                Your fitness journey continues here.
+              </Text>
             </View>
-            <Text className="mb-2 font-bold text-gray-900 text-3xl">
-              AI Broly
-            </Text>
-            <Text className="text-gray-600 text-lg text-center">
-              Your fitness journey continues here.
-            </Text>
           </View>
-        </View>
 
-        {/* Form Section */}
-        <View className="bg-white shadow-sm mb-6 p-6 border border-gray-100 rounded-2xl">
-          <Text className="mb-2 font-medium text-gray-700 text-2xl text-center">
-            Welcome Back
-          </Text>
-
-          {/* Email Field */}
-          <View>
-            <Text className="mb-2 font-medium text-gray-700 text-sm">
-              Email
+          {/* Form Section */}
+          <View className="bg-white shadow-sm mb-6 p-6 border border-gray-100 rounded-2xl">
+            <Text className="mb-2 font-medium text-gray-700 text-2xl text-center">
+              Welcome Back
             </Text>
-            <View className="flex-row items-center bg-gray-50 p-4 border-gray-200 rounded-xl">
-              <Ionicons name="mail-outline" size={20} color="#6B7280" />
-              <TextInput
-                className="flex-1 ml-3 text-gray-900"
-                autoCapitalize="none"
-                value={emailAddress}
-                placeholder="Enter your email"
-                placeholderTextColor="#9CA3AF"
-                onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-                editable={!isLoading}
-              />
-            </View>
-            {/* Password Field */}
-            <View className="mb-6">
+
+            {/* Email Field */}
+            <View>
               <Text className="mb-2 font-medium text-gray-700 text-sm">
-                Password
+                Email
               </Text>
               <View className="flex-row items-center bg-gray-50 p-4 border-gray-200 rounded-xl">
-                <Ionicons
-                  name="lock-closed-outline"
-                  size={20}
-                  color="#6B7280"
-                />
+                <Ionicons name="mail-outline" size={20} color="#6B7280" />
                 <TextInput
                   className="flex-1 ml-3 text-gray-900"
-                  value={password}
-                  placeholder="Enter your password"
+                  autoCapitalize="none"
+                  value={emailAddress}
+                  placeholder="Enter your email"
                   placeholderTextColor="#9CA3AF"
-                  secureTextEntry={true}
-                  onChangeText={(password) => setPassword(password)}
+                  onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
                   editable={!isLoading}
                 />
               </View>
+              {/* Password Field */}
+              <View className="mb-6">
+                <Text className="mb-2 font-medium text-gray-700 text-sm">
+                  Password
+                </Text>
+                <View className="flex-row items-center bg-gray-50 p-4 border-gray-200 rounded-xl">
+                  <Ionicons
+                    name="lock-closed-outline"
+                    size={20}
+                    color="#6B7280"
+                  />
+                  <TextInput
+                    className="flex-1 ml-3 text-gray-900"
+                    value={password}
+                    placeholder="Enter your password"
+                    placeholderTextColor="#9CA3AF"
+                    secureTextEntry={true}
+                    onChangeText={(password) => setPassword(password)}
+                    editable={!isLoading}
+                  />
+                </View>
+              </View>
             </View>
           </View>
-        </View>
-        <Text>Sign in</Text>
 
-        <TouchableOpacity onPress={onSignInPress}>
-          <Text>Continue</Text>
-        </TouchableOpacity>
-        <View style={{ display: "flex", flexDirection: "row", gap: 3 }}>
-          <Link href="/sign-up">
-            <Text>Sign up</Text>
-          </Link>
+          {/* Actions Section */}
+          <TouchableOpacity
+            onPress={onSignInPress}
+            className={`rounded-xl py-4 mb-4 shadow-sm ${
+              isLoading ? "bg-gray-400" : "bg-blue-600"
+            }`}
+            activeOpacity={0.8}
+            disabled={isLoading}
+          >
+            <View className="flex-row justify-center items-center">
+              {isLoaded ? (
+                <Ionicons name="log-in-outline" size={20} color="white" />
+              ) : (
+                <Ionicons name="refresh-outline" size={20} color="white" />
+              )}
+              <Text className="ml-2 font-semibold text-white text-lg">
+                {isLoading ? "Signing In..." : "Sign In"}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Divider */}
+          <View className="flex-row items-center my-4">
+            <View className="flex-1 bg-gray-300 h-px" />
+            <Text className="mx-4 text-gray-500 text-sm">OR</Text>
+            <View className="flex-1 bg-gray-300 h-px" />
+          </View>
+          <GoogleSignInButton />
+
+          <View className="items-center pt-8">
+            <Link href="/sign-up">
+              <Text>Don't have an account? Sign Up</Text>
+            </Link>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
