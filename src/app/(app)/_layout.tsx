@@ -7,7 +7,7 @@ export default function Layout() {
   console.log("🚀 ~ Layout ~ isSignedIn:", isSignedIn);
   if (!isLoaded) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#6E9B0B" />
       </View>
     );
